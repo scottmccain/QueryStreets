@@ -1,0 +1,316 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Streets_SanDiegoModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="Streets_SanDiegoModelStoreContainer" />
+        <Function Name="LEVENSHTEIN" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="s" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="t" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="min3" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="a" Type="int" Mode="In" />
+          <Parameter Name="b" Type="int" Mode="In" />
+          <Parameter Name="c" Type="int" Mode="In" />
+        </Function>
+        <Function Name="TRIM" ReturnType="varchar(max)" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="string" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="up_CreateAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TigerLineId" Type="int" Mode="In" />
+          <Parameter Name="RangeId" Type="int" Mode="In" />
+          <Parameter Name="First" Type="varchar" Mode="In" />
+          <Parameter Name="Last" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="up_CreatePlace" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PlaceId" Type="int" Mode="In" />
+          <Parameter Name="StateFips" Type="char" Mode="In" />
+          <Parameter Name="CountyFips" Type="char" Mode="In" />
+          <Parameter Name="PlaceFips" Type="varchar" Mode="In" />
+          <Parameter Name="StateName" Type="varchar" Mode="In" />
+          <Parameter Name="CountyName" Type="varchar" Mode="In" />
+          <Parameter Name="PlaceName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="up_CreateStreet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TigerLineId" Type="int" Mode="In" />
+          <Parameter Name="CensusFeatureClassCode" Type="char" Mode="In" />
+          <Parameter Name="DirectionPrefix" Type="char" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Type" Type="varchar" Mode="In" />
+          <Parameter Name="Places" Type="varchar(max)" Mode="In" />
+          <Parameter Name="DirectionSuffix" Type="char" Mode="In" />
+        </Function>
+        <Function Name="up_CreateStreetSegment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TigerLineId" Type="int" Mode="In" />
+          <Parameter Name="Sequence" Type="int" Mode="In" />
+          <Parameter Name="Latitude" Type="float" Mode="In" />
+          <Parameter Name="Longitude" Type="float" Mode="In" />
+        </Function>
+        <Function Name="up_GetAllStreetNames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="up_GetPlaceByCityAndState" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CityName" Type="varchar" Mode="In" />
+          <Parameter Name="StateName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="up_GetPlacesByState" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StateName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="up_GetStreetByAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="number" Type="int" Mode="In" />
+          <Parameter Name="place_id" Type="int" Mode="In" />
+          <Parameter Name="street" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="up_GetStreetNameById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TigerLineId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="up_GetStreetNamesByIdList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TigerLineIdList" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="up_GetStreetSegmentsByTLIDOrdered" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TLID" Type="int" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Streets_SanDiegoModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="Streets_SanDiegoEntities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="CreateAddress">
+            <Parameter Name="TigerLineId" Mode="In" Type="Int32" />
+            <Parameter Name="RangeId" Mode="In" Type="Int32" />
+            <Parameter Name="First" Mode="In" Type="String" />
+            <Parameter Name="Last" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CreatePlace">
+            <Parameter Name="PlaceId" Mode="In" Type="Int32" />
+            <Parameter Name="StateFips" Mode="In" Type="String" />
+            <Parameter Name="CountyFips" Mode="In" Type="String" />
+            <Parameter Name="PlaceFips" Mode="In" Type="String" />
+            <Parameter Name="StateName" Mode="In" Type="String" />
+            <Parameter Name="CountyName" Mode="In" Type="String" />
+            <Parameter Name="PlaceName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CreateStreet">
+            <Parameter Name="TigerLineId" Mode="In" Type="Int32" />
+            <Parameter Name="CensusFeatureClassCode" Mode="In" Type="String" />
+            <Parameter Name="DirectionPrefix" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Type" Mode="In" Type="String" />
+            <Parameter Name="Places" Mode="In" Type="String" />
+            <Parameter Name="DirectionSuffix" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CreateStreetSegment">
+            <Parameter Name="TigerLineId" Mode="In" Type="Int32" />
+            <Parameter Name="Sequence" Mode="In" Type="Int32" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="GetAllStreetNames" ReturnType="Collection(Streets_SanDiegoModel.GetAllStreetNames_Result)" />
+          <FunctionImport Name="GetStreetByAddress" ReturnType="Collection(Streets_SanDiegoModel.GetStreetByAddress_Result)">
+            <Parameter Name="number" Mode="In" Type="Int32" />
+            <Parameter Name="place_id" Mode="In" Type="Int32" />
+            <Parameter Name="street" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetStreetNameById" ReturnType="Collection(Streets_SanDiegoModel.GetStreetNameById_Result)">
+          <Parameter Name="TigerLineId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetStreetNamesByIdList" ReturnType="Collection(Streets_SanDiegoModel.GetStreetNamesByIdList_Result)">
+          <Parameter Name="TigerLineIdList" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetPlaceByCityAndState" ReturnType="Collection(Streets_SanDiegoModel.GetPlaceByCityAndState_Result)">
+            <Parameter Name="CityName" Mode="In" Type="String" />
+            <Parameter Name="StateName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetPlacesByState" ReturnType="Collection(Streets_SanDiegoModel.GetPlacesByState_Result)">
+          <Parameter Name="StateName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetStreetSegmentsByTLIDOrdered" ReturnType="Collection(Streets_SanDiegoModel.GetStreetSegmentsByTLIDOrdered_Result)">
+          <Parameter Name="TLID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="GetAllStreetNames_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="TigerLineId" Nullable="false" />
+          <Property Type="Int32" Name="PlaceId" Nullable="false" />
+          <Property Type="String" Name="CensusFeatureClassCode" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="DirectionPrefix" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="DirectionSuffix" Nullable="false" MaxLength="2" />
+        </ComplexType>
+        <ComplexType Name="GetStreetByAddress_Result">
+          <Property Type="Int32" Name="TigerLineId" Nullable="false" />
+          <Property Type="String" Name="First" Nullable="false" MaxLength="11" />
+          <Property Type="String" Name="Last" Nullable="false" MaxLength="11" />
+          <Property Type="Int32" Name="Diff" Nullable="true" />
+          <Property Type="String" Name="FullAddress" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetStreetNameById_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="TigerLineId" Nullable="false" />
+          <Property Type="Int32" Name="PlaceId" Nullable="false" />
+          <Property Type="String" Name="CensusFeatureClassCode" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="DirectionPrefix" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="DirectionSuffix" Nullable="false" MaxLength="2" />
+        </ComplexType>
+        <ComplexType Name="GetStreetNamesByIdList_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="TigerLineId" Nullable="false" />
+          <Property Type="Int32" Name="PlaceId" Nullable="false" />
+          <Property Type="String" Name="CensusFeatureClassCode" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="DirectionPrefix" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="DirectionSuffix" Nullable="false" MaxLength="2" />
+        </ComplexType>
+        <ComplexType Name="GetStreetSegmentsByTLIDOrdered_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="TigerLineId" Nullable="false" />
+          <Property Type="Int32" Name="Sequence" Nullable="false" />
+          <Property Type="Double" Name="Latitude" Nullable="true" />
+          <Property Type="Double" Name="Longitude" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetPlaceByCityAndState_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="StateCode" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="CountyCode" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="PlaceCode" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="StateName" Nullable="false" MaxLength="60" />
+          <Property Type="String" Name="CountyName" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="PlaceName" Nullable="false" MaxLength="60" />
+        </ComplexType>
+        <ComplexType Name="GetPlacesByState_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="StateCode" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="CountyCode" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="PlaceCode" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="StateName" Nullable="false" MaxLength="60" />
+          <Property Type="String" Name="CountyName" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="PlaceName" Nullable="false" MaxLength="60" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Streets_SanDiegoModelStoreContainer" CdmEntityContainer="Streets_SanDiegoEntities" >
+          <FunctionImportMapping FunctionImportName="CreateAddress" FunctionName="Streets_SanDiegoModel.Store.up_CreateAddress" />
+          <FunctionImportMapping FunctionImportName="CreatePlace" FunctionName="Streets_SanDiegoModel.Store.up_CreatePlace" />
+          <FunctionImportMapping FunctionImportName="CreateStreet" FunctionName="Streets_SanDiegoModel.Store.up_CreateStreet" />
+          <FunctionImportMapping FunctionImportName="CreateStreetSegment" FunctionName="Streets_SanDiegoModel.Store.up_CreateStreetSegment" />
+          <FunctionImportMapping FunctionImportName="GetAllStreetNames" FunctionName="Streets_SanDiegoModel.Store.up_GetAllStreetNames">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Streets_SanDiegoModel.GetAllStreetNames_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TigerLineId" ColumnName="TigerLineId" />
+                <ScalarProperty Name="PlaceId" ColumnName="PlaceId" />
+                <ScalarProperty Name="CensusFeatureClassCode" ColumnName="CensusFeatureClassCode" />
+                <ScalarProperty Name="DirectionPrefix" ColumnName="DirectionPrefix" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="DirectionSuffix" ColumnName="DirectionSuffix" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetStreetByAddress" FunctionName="Streets_SanDiegoModel.Store.up_GetStreetByAddress">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Streets_SanDiegoModel.GetStreetByAddress_Result">
+                <ScalarProperty Name="TigerLineId" ColumnName="TigerLineId" />
+                <ScalarProperty Name="First" ColumnName="First" />
+                <ScalarProperty Name="Last" ColumnName="Last" />
+                <ScalarProperty Name="Diff" ColumnName="Diff" />
+                <ScalarProperty Name="FullAddress" ColumnName="FullAddress" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetStreetNameById" FunctionName="Streets_SanDiegoModel.Store.up_GetStreetNameById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Streets_SanDiegoModel.GetStreetNameById_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TigerLineId" ColumnName="TigerLineId" />
+                <ScalarProperty Name="PlaceId" ColumnName="PlaceId" />
+                <ScalarProperty Name="CensusFeatureClassCode" ColumnName="CensusFeatureClassCode" />
+                <ScalarProperty Name="DirectionPrefix" ColumnName="DirectionPrefix" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="DirectionSuffix" ColumnName="DirectionSuffix" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetStreetNamesByIdList" FunctionName="Streets_SanDiegoModel.Store.up_GetStreetNamesByIdList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Streets_SanDiegoModel.GetStreetNamesByIdList_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TigerLineId" ColumnName="TigerLineId" />
+                <ScalarProperty Name="PlaceId" ColumnName="PlaceId" />
+                <ScalarProperty Name="CensusFeatureClassCode" ColumnName="CensusFeatureClassCode" />
+                <ScalarProperty Name="DirectionPrefix" ColumnName="DirectionPrefix" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="DirectionSuffix" ColumnName="DirectionSuffix" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetPlaceByCityAndState" FunctionName="Streets_SanDiegoModel.Store.up_GetPlaceByCityAndState">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Streets_SanDiegoModel.GetPlaceByCityAndState_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="StateCode" ColumnName="StateCode" />
+                <ScalarProperty Name="CountyCode" ColumnName="CountyCode" />
+                <ScalarProperty Name="PlaceCode" ColumnName="PlaceCode" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="CountyName" ColumnName="CountyName" />
+                <ScalarProperty Name="PlaceName" ColumnName="PlaceName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetPlacesByState" FunctionName="Streets_SanDiegoModel.Store.up_GetPlacesByState">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Streets_SanDiegoModel.GetPlacesByState_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="StateCode" ColumnName="StateCode" />
+                <ScalarProperty Name="CountyCode" ColumnName="CountyCode" />
+                <ScalarProperty Name="PlaceCode" ColumnName="PlaceCode" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="CountyName" ColumnName="CountyName" />
+                <ScalarProperty Name="PlaceName" ColumnName="PlaceName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetStreetSegmentsByTLIDOrdered" FunctionName="Streets_SanDiegoModel.Store.up_GetStreetSegmentsByTLIDOrdered">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Streets_SanDiegoModel.GetStreetSegmentsByTLIDOrdered_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TigerLineId" ColumnName="TigerLineId" />
+                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="TigerLineModel" />
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace TIGER_Reader
+{
+    class FixedColumnDictionaryEntry
+    {
+        public string Name { get; set; }
+        public int ColumnStart { get; set; }
+        public int Length { get; set; }
+    }
+}

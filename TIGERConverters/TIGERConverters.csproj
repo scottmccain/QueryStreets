@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AC756144-54A7-4077-9CCF-87A864AB5100}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TIGERConverters</RootNamespace>
+    <AssemblyName>TIGERConverters</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConversionFactory.cs" />
+    <Compile Include="IClassConvert.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecordType1Converter.cs" />
+    <Compile Include="RecordType2Converter.cs" />
+    <Compile Include="RecordType4Converter.cs" />
+    <Compile Include="RecordType5Converter.cs" />
+    <Compile Include="RecordType6Converter.cs" />
+    <Compile Include="RecordTypeCConverter.cs" />
+    <Compile Include="RecordTypeDictionaryRepository.cs" />
+    <Compile Include="RecordTypes\RecordType1.cs" />
+    <Compile Include="RecordTypes\RecordType2.cs" />
+    <Compile Include="RecordTypes\RecordType4.cs" />
+    <Compile Include="RecordTypes\RecordType5.cs" />
+    <Compile Include="RecordTypes\RecordType6.cs" />
+    <Compile Include="RecordTypes\RecordTypeC.cs" />
+    <Compile Include="StringConstants.cs" />
+    <Compile Include="StringExtension.cs" />
+    <Compile Include="TigerLineRecordType.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="rt1.dict" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="rtc.dict" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="rt2.dict" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="rt4.dict" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="rt5.dict" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="rt6.dict" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TIGERShared\TIGERShared.csproj">
+      <Project>{C34ED930-45C0-4AF5-9C13-27E6E5A08077}</Project>
+      <Name>TIGERShared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

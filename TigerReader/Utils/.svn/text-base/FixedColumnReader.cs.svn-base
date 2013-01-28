@@ -1,0 +1,68 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+
+namespace TIGER_Reader
+{
+    class FixedColumnReader
+    {
+        private List<FixedColumnDictionaryEntry> _dictionary;
+
+        public FixedColumnReader(List<FixedColumnDictionaryEntry> dictionary)
+        {
+            _dictionary = dictionary;
+        }
+
+        private List<FixedColumnDictionaryEntry> GetOrderedFixedColumnDictionary()
+        {
+            var query = from t in _dictionary
+                        orderby t.ColumnStart
+                        select t;
+
+            return query.ToList();
+        }
+
+        public List<Dictionary<string, string>> Read(string data)
+        {
+            List<Dictionary<string, string>> records = new List<Dictionary<string, string>>();
+
+            StringReader reader = new StringReader(data);
+
+            List<FixedColumnDictionaryEntry> orderedDictionary = GetOrderedFixedColumnDictionary();
+
+            string line = string.Empty;
+            do
+            {
+                line = reader.ReadLine();
+                if (!string.IsNullOrWhiteSpace(line))
+                {
+                    Dictionary<string, string> values = new Dictionary<string, string>();
+
+                    for (int i = 0; i < orderedDictionary.Count; i++)
+                    {
+                        string columnName = orderedDictionary[i].Name;
+                        string columnData = line.Substring(orderedDictionary[i].ColumnStart, orderedDictionary[i].ColumnStart + orderedDictionary[i].Length > line.Length ? line.Length - orderedDictionary[i].ColumnStart : orderedDictionary[i].Length);
+
+                        values.Add(columnName, columnData.Trim());
+                    }
+
+                    records.Add(values);
+                }
+
+            } while (!string.IsNullOrEmpty(line));
+
+
+            return records;
+        }
+
+        public List<Dictionary<string, string>> Read(Stream stream)
+        {
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return Read(reader.ReadToEnd());
+            }
+        }
+    }
+}
