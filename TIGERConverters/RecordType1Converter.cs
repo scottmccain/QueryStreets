@@ -22,6 +22,8 @@ namespace TIGERConverters
             return _convert(fromValues);
         }
 
+        public TigerLineRecordType RecordType => TigerLineRecordType.RecordType1;
+
         #endregion
     }
 }

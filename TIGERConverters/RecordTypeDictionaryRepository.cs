@@ -7,9 +7,9 @@ namespace TIGERConverters
 {
     public class RecordTypeDictionaryRepository
     {
-        public List<FixedColumnDictionaryEntry> ReadRecordTypeDictionary(TigerLineRecordType type)
+        public static FixedColumnDictionary ReadRecordTypeDictionary(TigerLineRecordType type)
         {
-            var dictionary = new List<FixedColumnDictionaryEntry>();
+            var dictionary = new FixedColumnDictionary();
 
             var recordTypeSuffixMap = new Dictionary<TigerLineRecordType, string>
                                           {
@@ -21,32 +21,32 @@ namespace TIGERConverters
                 { TigerLineRecordType.RecordTypeC, "rtc" }
             };
 
-            var dictionaryFilename = string.Format("TIGERConverters.{0}.dict", recordTypeSuffixMap[type]);
+            var dictionaryFilename = $"TIGERConverters.{recordTypeSuffixMap[type]}.dict";
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(dictionaryFilename))
             {
-                if (stream != null)
-                    using (var reader = new StreamReader(stream))
+                if (stream == null) return dictionary;
+                using (var reader = new StreamReader(stream))
+                {
+                    string line;
+                    do
                     {
-                        string line;
-                        do
-                        {
-                            line = reader.ReadLine();
-                            if (string.IsNullOrWhiteSpace(line)) continue;
+                        line = reader.ReadLine();
+                        if (string.IsNullOrWhiteSpace(line)) continue;
 
-                            var parts = line.Split(new[] { (char)9 });
+                        var parts = line.Split(new[] { (char)9 });
 
-                            var entry = new FixedColumnDictionaryEntry {Name = parts[0]};
+                        var entry = new FixedColumnDictionaryEntry {Name = parts[0]};
 
-                            int integerValue;
-                            int.TryParse(parts[1], out integerValue);
-                            entry.ColumnStart = integerValue - 1;
+                        int integerValue;
+                        int.TryParse(parts[1], out integerValue);
+                        entry.ColumnStart = integerValue - 1;
 
-                            int.TryParse(parts[2], out integerValue);
-                            entry.Length = integerValue;
+                        int.TryParse(parts[2], out integerValue);
+                        entry.Length = integerValue;
 
-                            dictionary.Add(entry);
-                        } while (!string.IsNullOrEmpty(line));
-                    }
+                        dictionary.Add(entry);
+                    } while (!string.IsNullOrEmpty(line));
+                }
             }
 
             return dictionary;

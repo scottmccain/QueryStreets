@@ -8,15 +8,15 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
-
 namespace TigerReader.Data
 {
     #region Contexts
@@ -495,11 +495,11 @@ namespace TigerReader.Data
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region ComplexTypes
     
     /// <summary>
@@ -538,7 +538,8 @@ namespace TigerReader.Data
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -555,7 +556,7 @@ namespace TigerReader.Data
             {
                 OnIdChanging(value);
                 ReportPropertyChanging("Id");
-                _Id = StructuralObject.SetValidValue(value);
+                _Id = StructuralObject.SetValidValue(value, "Id");
                 ReportPropertyChanged("Id");
                 OnIdChanged();
             }
@@ -579,7 +580,7 @@ namespace TigerReader.Data
             {
                 OnTigerLineIdChanging(value);
                 ReportPropertyChanging("TigerLineId");
-                _TigerLineId = StructuralObject.SetValidValue(value);
+                _TigerLineId = StructuralObject.SetValidValue(value, "TigerLineId");
                 ReportPropertyChanged("TigerLineId");
                 OnTigerLineIdChanged();
             }
@@ -603,7 +604,7 @@ namespace TigerReader.Data
             {
                 OnPlaceIdChanging(value);
                 ReportPropertyChanging("PlaceId");
-                _PlaceId = StructuralObject.SetValidValue(value);
+                _PlaceId = StructuralObject.SetValidValue(value, "PlaceId");
                 ReportPropertyChanged("PlaceId");
                 OnPlaceIdChanged();
             }
@@ -627,7 +628,7 @@ namespace TigerReader.Data
             {
                 OnCensusFeatureClassCodeChanging(value);
                 ReportPropertyChanging("CensusFeatureClassCode");
-                _CensusFeatureClassCode = StructuralObject.SetValidValue(value, false);
+                _CensusFeatureClassCode = StructuralObject.SetValidValue(value, false, "CensusFeatureClassCode");
                 ReportPropertyChanged("CensusFeatureClassCode");
                 OnCensusFeatureClassCodeChanged();
             }
@@ -651,7 +652,7 @@ namespace TigerReader.Data
             {
                 OnDirectionPrefixChanging(value);
                 ReportPropertyChanging("DirectionPrefix");
-                _DirectionPrefix = StructuralObject.SetValidValue(value, false);
+                _DirectionPrefix = StructuralObject.SetValidValue(value, false, "DirectionPrefix");
                 ReportPropertyChanged("DirectionPrefix");
                 OnDirectionPrefixChanged();
             }
@@ -675,7 +676,7 @@ namespace TigerReader.Data
             {
                 OnNameChanging(value);
                 ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, false);
+                _Name = StructuralObject.SetValidValue(value, false, "Name");
                 ReportPropertyChanged("Name");
                 OnNameChanged();
             }
@@ -699,7 +700,7 @@ namespace TigerReader.Data
             {
                 OnTypeChanging(value);
                 ReportPropertyChanging("Type");
-                _Type = StructuralObject.SetValidValue(value, false);
+                _Type = StructuralObject.SetValidValue(value, false, "Type");
                 ReportPropertyChanged("Type");
                 OnTypeChanged();
             }
@@ -723,7 +724,7 @@ namespace TigerReader.Data
             {
                 OnDirectionSuffixChanging(value);
                 ReportPropertyChanging("DirectionSuffix");
-                _DirectionSuffix = StructuralObject.SetValidValue(value, false);
+                _DirectionSuffix = StructuralObject.SetValidValue(value, false, "DirectionSuffix");
                 ReportPropertyChanged("DirectionSuffix");
                 OnDirectionSuffixChanged();
             }
@@ -733,6 +734,7 @@ namespace TigerReader.Data
         partial void OnDirectionSuffixChanged();
 
         #endregion
+
     }
     
     /// <summary>
@@ -769,7 +771,8 @@ namespace TigerReader.Data
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -786,7 +789,7 @@ namespace TigerReader.Data
             {
                 OnIdChanging(value);
                 ReportPropertyChanging("Id");
-                _Id = StructuralObject.SetValidValue(value);
+                _Id = StructuralObject.SetValidValue(value, "Id");
                 ReportPropertyChanged("Id");
                 OnIdChanged();
             }
@@ -810,7 +813,7 @@ namespace TigerReader.Data
             {
                 OnStateCodeChanging(value);
                 ReportPropertyChanging("StateCode");
-                _StateCode = StructuralObject.SetValidValue(value, false);
+                _StateCode = StructuralObject.SetValidValue(value, false, "StateCode");
                 ReportPropertyChanged("StateCode");
                 OnStateCodeChanged();
             }
@@ -834,7 +837,7 @@ namespace TigerReader.Data
             {
                 OnCountyCodeChanging(value);
                 ReportPropertyChanging("CountyCode");
-                _CountyCode = StructuralObject.SetValidValue(value, false);
+                _CountyCode = StructuralObject.SetValidValue(value, false, "CountyCode");
                 ReportPropertyChanged("CountyCode");
                 OnCountyCodeChanged();
             }
@@ -858,7 +861,7 @@ namespace TigerReader.Data
             {
                 OnPlaceCodeChanging(value);
                 ReportPropertyChanging("PlaceCode");
-                _PlaceCode = StructuralObject.SetValidValue(value, false);
+                _PlaceCode = StructuralObject.SetValidValue(value, false, "PlaceCode");
                 ReportPropertyChanged("PlaceCode");
                 OnPlaceCodeChanged();
             }
@@ -882,7 +885,7 @@ namespace TigerReader.Data
             {
                 OnStateNameChanging(value);
                 ReportPropertyChanging("StateName");
-                _StateName = StructuralObject.SetValidValue(value, false);
+                _StateName = StructuralObject.SetValidValue(value, false, "StateName");
                 ReportPropertyChanged("StateName");
                 OnStateNameChanged();
             }
@@ -906,7 +909,7 @@ namespace TigerReader.Data
             {
                 OnCountyNameChanging(value);
                 ReportPropertyChanging("CountyName");
-                _CountyName = StructuralObject.SetValidValue(value, false);
+                _CountyName = StructuralObject.SetValidValue(value, false, "CountyName");
                 ReportPropertyChanged("CountyName");
                 OnCountyNameChanged();
             }
@@ -930,7 +933,7 @@ namespace TigerReader.Data
             {
                 OnPlaceNameChanging(value);
                 ReportPropertyChanging("PlaceName");
-                _PlaceName = StructuralObject.SetValidValue(value, false);
+                _PlaceName = StructuralObject.SetValidValue(value, false, "PlaceName");
                 ReportPropertyChanged("PlaceName");
                 OnPlaceNameChanged();
             }
@@ -940,6 +943,7 @@ namespace TigerReader.Data
         partial void OnPlaceNameChanged();
 
         #endregion
+
     }
     
     /// <summary>
@@ -976,7 +980,8 @@ namespace TigerReader.Data
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -993,7 +998,7 @@ namespace TigerReader.Data
             {
                 OnIdChanging(value);
                 ReportPropertyChanging("Id");
-                _Id = StructuralObject.SetValidValue(value);
+                _Id = StructuralObject.SetValidValue(value, "Id");
                 ReportPropertyChanged("Id");
                 OnIdChanged();
             }
@@ -1017,7 +1022,7 @@ namespace TigerReader.Data
             {
                 OnStateCodeChanging(value);
                 ReportPropertyChanging("StateCode");
-                _StateCode = StructuralObject.SetValidValue(value, false);
+                _StateCode = StructuralObject.SetValidValue(value, false, "StateCode");
                 ReportPropertyChanged("StateCode");
                 OnStateCodeChanged();
             }
@@ -1041,7 +1046,7 @@ namespace TigerReader.Data
             {
                 OnCountyCodeChanging(value);
                 ReportPropertyChanging("CountyCode");
-                _CountyCode = StructuralObject.SetValidValue(value, false);
+                _CountyCode = StructuralObject.SetValidValue(value, false, "CountyCode");
                 ReportPropertyChanged("CountyCode");
                 OnCountyCodeChanged();
             }
@@ -1065,7 +1070,7 @@ namespace TigerReader.Data
             {
                 OnPlaceCodeChanging(value);
                 ReportPropertyChanging("PlaceCode");
-                _PlaceCode = StructuralObject.SetValidValue(value, false);
+                _PlaceCode = StructuralObject.SetValidValue(value, false, "PlaceCode");
                 ReportPropertyChanged("PlaceCode");
                 OnPlaceCodeChanged();
             }
@@ -1089,7 +1094,7 @@ namespace TigerReader.Data
             {
                 OnStateNameChanging(value);
                 ReportPropertyChanging("StateName");
-                _StateName = StructuralObject.SetValidValue(value, false);
+                _StateName = StructuralObject.SetValidValue(value, false, "StateName");
                 ReportPropertyChanged("StateName");
                 OnStateNameChanged();
             }
@@ -1113,7 +1118,7 @@ namespace TigerReader.Data
             {
                 OnCountyNameChanging(value);
                 ReportPropertyChanging("CountyName");
-                _CountyName = StructuralObject.SetValidValue(value, false);
+                _CountyName = StructuralObject.SetValidValue(value, false, "CountyName");
                 ReportPropertyChanged("CountyName");
                 OnCountyNameChanged();
             }
@@ -1137,7 +1142,7 @@ namespace TigerReader.Data
             {
                 OnPlaceNameChanging(value);
                 ReportPropertyChanging("PlaceName");
-                _PlaceName = StructuralObject.SetValidValue(value, false);
+                _PlaceName = StructuralObject.SetValidValue(value, false, "PlaceName");
                 ReportPropertyChanged("PlaceName");
                 OnPlaceNameChanged();
             }
@@ -1147,6 +1152,7 @@ namespace TigerReader.Data
         partial void OnPlaceNameChanged();
 
         #endregion
+
     }
     
     /// <summary>
@@ -1175,7 +1181,8 @@ namespace TigerReader.Data
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1192,7 +1199,7 @@ namespace TigerReader.Data
             {
                 OnTigerLineIdChanging(value);
                 ReportPropertyChanging("TigerLineId");
-                _TigerLineId = StructuralObject.SetValidValue(value);
+                _TigerLineId = StructuralObject.SetValidValue(value, "TigerLineId");
                 ReportPropertyChanged("TigerLineId");
                 OnTigerLineIdChanged();
             }
@@ -1216,7 +1223,7 @@ namespace TigerReader.Data
             {
                 OnFirstChanging(value);
                 ReportPropertyChanging("First");
-                _First = StructuralObject.SetValidValue(value, false);
+                _First = StructuralObject.SetValidValue(value, false, "First");
                 ReportPropertyChanged("First");
                 OnFirstChanged();
             }
@@ -1240,7 +1247,7 @@ namespace TigerReader.Data
             {
                 OnLastChanging(value);
                 ReportPropertyChanging("Last");
-                _Last = StructuralObject.SetValidValue(value, false);
+                _Last = StructuralObject.SetValidValue(value, false, "Last");
                 ReportPropertyChanged("Last");
                 OnLastChanged();
             }
@@ -1264,7 +1271,7 @@ namespace TigerReader.Data
             {
                 OnDiffChanging(value);
                 ReportPropertyChanging("Diff");
-                _Diff = StructuralObject.SetValidValue(value);
+                _Diff = StructuralObject.SetValidValue(value, "Diff");
                 ReportPropertyChanged("Diff");
                 OnDiffChanged();
             }
@@ -1288,7 +1295,7 @@ namespace TigerReader.Data
             {
                 OnFullAddressChanging(value);
                 ReportPropertyChanging("FullAddress");
-                _FullAddress = StructuralObject.SetValidValue(value, true);
+                _FullAddress = StructuralObject.SetValidValue(value, true, "FullAddress");
                 ReportPropertyChanged("FullAddress");
                 OnFullAddressChanged();
             }
@@ -1298,6 +1305,7 @@ namespace TigerReader.Data
         partial void OnFullAddressChanged();
 
         #endregion
+
     }
     
     /// <summary>
@@ -1336,7 +1344,8 @@ namespace TigerReader.Data
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1353,7 +1362,7 @@ namespace TigerReader.Data
             {
                 OnIdChanging(value);
                 ReportPropertyChanging("Id");
-                _Id = StructuralObject.SetValidValue(value);
+                _Id = StructuralObject.SetValidValue(value, "Id");
                 ReportPropertyChanged("Id");
                 OnIdChanged();
             }
@@ -1377,7 +1386,7 @@ namespace TigerReader.Data
             {
                 OnTigerLineIdChanging(value);
                 ReportPropertyChanging("TigerLineId");
-                _TigerLineId = StructuralObject.SetValidValue(value);
+                _TigerLineId = StructuralObject.SetValidValue(value, "TigerLineId");
                 ReportPropertyChanged("TigerLineId");
                 OnTigerLineIdChanged();
             }
@@ -1401,7 +1410,7 @@ namespace TigerReader.Data
             {
                 OnPlaceIdChanging(value);
                 ReportPropertyChanging("PlaceId");
-                _PlaceId = StructuralObject.SetValidValue(value);
+                _PlaceId = StructuralObject.SetValidValue(value, "PlaceId");
                 ReportPropertyChanged("PlaceId");
                 OnPlaceIdChanged();
             }
@@ -1425,7 +1434,7 @@ namespace TigerReader.Data
             {
                 OnCensusFeatureClassCodeChanging(value);
                 ReportPropertyChanging("CensusFeatureClassCode");
-                _CensusFeatureClassCode = StructuralObject.SetValidValue(value, false);
+                _CensusFeatureClassCode = StructuralObject.SetValidValue(value, false, "CensusFeatureClassCode");
                 ReportPropertyChanged("CensusFeatureClassCode");
                 OnCensusFeatureClassCodeChanged();
             }
@@ -1449,7 +1458,7 @@ namespace TigerReader.Data
             {
                 OnDirectionPrefixChanging(value);
                 ReportPropertyChanging("DirectionPrefix");
-                _DirectionPrefix = StructuralObject.SetValidValue(value, false);
+                _DirectionPrefix = StructuralObject.SetValidValue(value, false, "DirectionPrefix");
                 ReportPropertyChanged("DirectionPrefix");
                 OnDirectionPrefixChanged();
             }
@@ -1473,7 +1482,7 @@ namespace TigerReader.Data
             {
                 OnNameChanging(value);
                 ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, false);
+                _Name = StructuralObject.SetValidValue(value, false, "Name");
                 ReportPropertyChanged("Name");
                 OnNameChanged();
             }
@@ -1497,7 +1506,7 @@ namespace TigerReader.Data
             {
                 OnTypeChanging(value);
                 ReportPropertyChanging("Type");
-                _Type = StructuralObject.SetValidValue(value, false);
+                _Type = StructuralObject.SetValidValue(value, false, "Type");
                 ReportPropertyChanged("Type");
                 OnTypeChanged();
             }
@@ -1521,7 +1530,7 @@ namespace TigerReader.Data
             {
                 OnDirectionSuffixChanging(value);
                 ReportPropertyChanging("DirectionSuffix");
-                _DirectionSuffix = StructuralObject.SetValidValue(value, false);
+                _DirectionSuffix = StructuralObject.SetValidValue(value, false, "DirectionSuffix");
                 ReportPropertyChanged("DirectionSuffix");
                 OnDirectionSuffixChanged();
             }
@@ -1531,6 +1540,7 @@ namespace TigerReader.Data
         partial void OnDirectionSuffixChanged();
 
         #endregion
+
     }
     
     /// <summary>
@@ -1569,7 +1579,8 @@ namespace TigerReader.Data
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1586,7 +1597,7 @@ namespace TigerReader.Data
             {
                 OnIdChanging(value);
                 ReportPropertyChanging("Id");
-                _Id = StructuralObject.SetValidValue(value);
+                _Id = StructuralObject.SetValidValue(value, "Id");
                 ReportPropertyChanged("Id");
                 OnIdChanged();
             }
@@ -1610,7 +1621,7 @@ namespace TigerReader.Data
             {
                 OnTigerLineIdChanging(value);
                 ReportPropertyChanging("TigerLineId");
-                _TigerLineId = StructuralObject.SetValidValue(value);
+                _TigerLineId = StructuralObject.SetValidValue(value, "TigerLineId");
                 ReportPropertyChanged("TigerLineId");
                 OnTigerLineIdChanged();
             }
@@ -1634,7 +1645,7 @@ namespace TigerReader.Data
             {
                 OnPlaceIdChanging(value);
                 ReportPropertyChanging("PlaceId");
-                _PlaceId = StructuralObject.SetValidValue(value);
+                _PlaceId = StructuralObject.SetValidValue(value, "PlaceId");
                 ReportPropertyChanged("PlaceId");
                 OnPlaceIdChanged();
             }
@@ -1658,7 +1669,7 @@ namespace TigerReader.Data
             {
                 OnCensusFeatureClassCodeChanging(value);
                 ReportPropertyChanging("CensusFeatureClassCode");
-                _CensusFeatureClassCode = StructuralObject.SetValidValue(value, false);
+                _CensusFeatureClassCode = StructuralObject.SetValidValue(value, false, "CensusFeatureClassCode");
                 ReportPropertyChanged("CensusFeatureClassCode");
                 OnCensusFeatureClassCodeChanged();
             }
@@ -1682,7 +1693,7 @@ namespace TigerReader.Data
             {
                 OnDirectionPrefixChanging(value);
                 ReportPropertyChanging("DirectionPrefix");
-                _DirectionPrefix = StructuralObject.SetValidValue(value, false);
+                _DirectionPrefix = StructuralObject.SetValidValue(value, false, "DirectionPrefix");
                 ReportPropertyChanged("DirectionPrefix");
                 OnDirectionPrefixChanged();
             }
@@ -1706,7 +1717,7 @@ namespace TigerReader.Data
             {
                 OnNameChanging(value);
                 ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, false);
+                _Name = StructuralObject.SetValidValue(value, false, "Name");
                 ReportPropertyChanged("Name");
                 OnNameChanged();
             }
@@ -1730,7 +1741,7 @@ namespace TigerReader.Data
             {
                 OnTypeChanging(value);
                 ReportPropertyChanging("Type");
-                _Type = StructuralObject.SetValidValue(value, false);
+                _Type = StructuralObject.SetValidValue(value, false, "Type");
                 ReportPropertyChanged("Type");
                 OnTypeChanged();
             }
@@ -1754,7 +1765,7 @@ namespace TigerReader.Data
             {
                 OnDirectionSuffixChanging(value);
                 ReportPropertyChanging("DirectionSuffix");
-                _DirectionSuffix = StructuralObject.SetValidValue(value, false);
+                _DirectionSuffix = StructuralObject.SetValidValue(value, false, "DirectionSuffix");
                 ReportPropertyChanged("DirectionSuffix");
                 OnDirectionSuffixChanged();
             }
@@ -1764,6 +1775,7 @@ namespace TigerReader.Data
         partial void OnDirectionSuffixChanged();
 
         #endregion
+
     }
     
     /// <summary>
@@ -1792,7 +1804,8 @@ namespace TigerReader.Data
         }
 
         #endregion
-        #region Primitive Properties
+
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1809,7 +1822,7 @@ namespace TigerReader.Data
             {
                 OnIdChanging(value);
                 ReportPropertyChanging("Id");
-                _Id = StructuralObject.SetValidValue(value);
+                _Id = StructuralObject.SetValidValue(value, "Id");
                 ReportPropertyChanged("Id");
                 OnIdChanged();
             }
@@ -1833,7 +1846,7 @@ namespace TigerReader.Data
             {
                 OnTigerLineIdChanging(value);
                 ReportPropertyChanging("TigerLineId");
-                _TigerLineId = StructuralObject.SetValidValue(value);
+                _TigerLineId = StructuralObject.SetValidValue(value, "TigerLineId");
                 ReportPropertyChanged("TigerLineId");
                 OnTigerLineIdChanged();
             }
@@ -1857,7 +1870,7 @@ namespace TigerReader.Data
             {
                 OnSequenceChanging(value);
                 ReportPropertyChanging("Sequence");
-                _Sequence = StructuralObject.SetValidValue(value);
+                _Sequence = StructuralObject.SetValidValue(value, "Sequence");
                 ReportPropertyChanged("Sequence");
                 OnSequenceChanged();
             }
@@ -1881,7 +1894,7 @@ namespace TigerReader.Data
             {
                 OnLatitudeChanging(value);
                 ReportPropertyChanging("Latitude");
-                _Latitude = StructuralObject.SetValidValue(value);
+                _Latitude = StructuralObject.SetValidValue(value, "Latitude");
                 ReportPropertyChanged("Latitude");
                 OnLatitudeChanged();
             }
@@ -1905,7 +1918,7 @@ namespace TigerReader.Data
             {
                 OnLongitudeChanging(value);
                 ReportPropertyChanging("Longitude");
-                _Longitude = StructuralObject.SetValidValue(value);
+                _Longitude = StructuralObject.SetValidValue(value, "Longitude");
                 ReportPropertyChanged("Longitude");
                 OnLongitudeChanged();
             }
@@ -1915,8 +1928,9 @@ namespace TigerReader.Data
         partial void OnLongitudeChanged();
 
         #endregion
+
     }
 
     #endregion
-    
+
 }

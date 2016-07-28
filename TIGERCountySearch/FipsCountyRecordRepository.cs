@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Reflection;
@@ -6,7 +7,7 @@ using TIGERShared;
 
 namespace TIGERCountySearch
 {
-    public class FipsCountyRecordRepository
+    public static class FipsCountyRecordRepository
     {
         const string StateCodeKey = "State Code";
         const string CountyCodeKey = "County Code";
@@ -20,20 +21,26 @@ namespace TIGERCountySearch
         const int CountyCodeColumnLength = 4;
         const int CountyNameColumnLength = 60;
 
-        private readonly List<FipsCountyRecord> _fipsRecords;
+        private static readonly List<FipsCountyRecord> _fipsRecords;
 
-        public FipsCountyRecordRepository()
+        static FipsCountyRecordRepository()
         {
             _fipsRecords = ReadFipsCountyRecords();
         }
 
-        public FipsCountyRecord FindRecordByCountyName(string countyName)
+        public static FipsCountyRecord FindRecordByCountyName(string countyName)
         {
             var query = from record in _fipsRecords
                         where record.CountyName.Contains(countyName)
                         select record;
 
             return query.FirstOrDefault();
+        }
+
+        public static Tuple<string, string> GetCountyInfo(string countyName)
+        {
+            return _fipsRecords.Where(f => f.CountyName.Contains(countyName))
+                .Select(r => new Tuple<string, string>(r.CountyCode, r.StateCode)).FirstOrDefault();
         }
 
         private static List<FipsCountyRecord> ReadFipsCountyRecords()

@@ -20,6 +20,8 @@ namespace TIGERConverters
             return _converter(fromValues);
         }
 
+        public TigerLineRecordType RecordType => TigerLineRecordType.RecordType4;
+
         #endregion
     }
 }
