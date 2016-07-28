@@ -9,34 +9,15 @@ using TIGERShared;
 
 namespace TIGER_Reader
 {
-    // TODO: use reflection and/or injection to find TConvert
-    public class RecordReader<T, TConvert> : IEnumerable<T>, IDisposable where TConvert : class, IClassConvert<T>, new()
+    public class RecordReader<T, TConvert> : IDisposable, IEnumerable<T> where TConvert : class, IClassConvert<T>, new()
     {
-        private FixedColumnStreamReader _reader;
-        private IClassConvert<T> _converter;
-        private bool _disposed;
+        private readonly FixedColumnStreamReader _reader;
+        private readonly IClassConvert<T> _converter;
 
         public RecordReader(Stream stream)
         {
             _converter = new TConvert();
             _reader = new FixedColumnStreamReader(stream, RecordTypeDictionaryRepository.ReadRecordTypeDictionary(_converter.RecordType));
-        }
-
-        public void Close()
-        {
-            try
-            {
-                _reader.Close();
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-        }
-
-        public void Reset()
-        {
-            _reader.Rewind();
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -59,25 +40,7 @@ namespace TIGER_Reader
 
         public void Dispose()
         {
-            // Dispose of unmanaged resources.
-            Dispose(true);
-            // Suppress finalization.
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (_disposed)
-                return;
-
-            if (disposing)
-            {
-                // Free any other managed objects here.
-                //
-            }
-
             _reader.Dispose();
-            _disposed = true;
         }
     }
 }

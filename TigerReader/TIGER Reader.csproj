@@ -47,6 +47,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,7 +62,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="RecordReader.cs" />
     <Compile Include="TigerDownload.cs" />
     <Compile Include="RecordTypeConversion.cs">
       <SubType>Code</SubType>
@@ -77,6 +77,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FixedColumnFileReader\FixedColumnFileCollection.csproj">
+      <Project>{44CEA464-5D23-4736-8CB5-286A82696057}</Project>
+      <Name>FixedColumnFileCollection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TIGERConverters\TIGERConverters.csproj">
       <Project>{AC756144-54A7-4077-9CCF-87A864AB5100}</Project>
       <Name>TIGERConverters</Name>
@@ -92,10 +96,6 @@
     <ProjectReference Include="..\TigerReader.Domain\TigerReader.Domain.csproj">
       <Project>{21E0B28B-6B3C-4FFC-A188-F855504747A5}</Project>
       <Name>TigerReader.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TIGERShared\TIGERShared.csproj">
-      <Project>{C34ED930-45C0-4AF5-9C13-27E6E5A08077}</Project>
-      <Name>TIGERShared</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

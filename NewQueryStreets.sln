@@ -13,11 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TigerReader.Domain", "Tiger
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIGER Reader", "TigerReader\TIGER Reader.csproj", "{A063DCE8-289F-44E9-B47D-B2507AA25E6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIGERShared", "TIGERShared\TIGERShared.csproj", "{C34ED930-45C0-4AF5-9C13-27E6E5A08077}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIGERConverters", "TIGERConverters\TIGERConverters.csproj", "{AC756144-54A7-4077-9CCF-87A864AB5100}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIGERCountySearch", "TIGERCountySearch\TIGERCountySearch.csproj", "{7764F6EF-CD96-4245-B2C6-D78FF6AA3E7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FixedColumnFileCollection", "FixedColumnFileReader\FixedColumnFileCollection.csproj", "{44CEA464-5D23-4736-8CB5-286A82696057}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,14 +66,6 @@ Global
 		{A063DCE8-289F-44E9-B47D-B2507AA25E6C}.Release|Any CPU.ActiveCfg = Release|x86
 		{A063DCE8-289F-44E9-B47D-B2507AA25E6C}.Release|x86.ActiveCfg = Release|x86
 		{A063DCE8-289F-44E9-B47D-B2507AA25E6C}.Release|x86.Build.0 = Release|x86
-		{C34ED930-45C0-4AF5-9C13-27E6E5A08077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C34ED930-45C0-4AF5-9C13-27E6E5A08077}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C34ED930-45C0-4AF5-9C13-27E6E5A08077}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C34ED930-45C0-4AF5-9C13-27E6E5A08077}.Debug|x86.Build.0 = Debug|Any CPU
-		{C34ED930-45C0-4AF5-9C13-27E6E5A08077}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C34ED930-45C0-4AF5-9C13-27E6E5A08077}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C34ED930-45C0-4AF5-9C13-27E6E5A08077}.Release|x86.ActiveCfg = Release|Any CPU
-		{C34ED930-45C0-4AF5-9C13-27E6E5A08077}.Release|x86.Build.0 = Release|Any CPU
 		{AC756144-54A7-4077-9CCF-87A864AB5100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC756144-54A7-4077-9CCF-87A864AB5100}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC756144-54A7-4077-9CCF-87A864AB5100}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -90,6 +82,14 @@ Global
 		{7764F6EF-CD96-4245-B2C6-D78FF6AA3E7D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7764F6EF-CD96-4245-B2C6-D78FF6AA3E7D}.Release|x86.ActiveCfg = Release|Any CPU
 		{7764F6EF-CD96-4245-B2C6-D78FF6AA3E7D}.Release|x86.Build.0 = Release|Any CPU
+		{44CEA464-5D23-4736-8CB5-286A82696057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44CEA464-5D23-4736-8CB5-286A82696057}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44CEA464-5D23-4736-8CB5-286A82696057}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{44CEA464-5D23-4736-8CB5-286A82696057}.Debug|x86.Build.0 = Debug|Any CPU
+		{44CEA464-5D23-4736-8CB5-286A82696057}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44CEA464-5D23-4736-8CB5-286A82696057}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44CEA464-5D23-4736-8CB5-286A82696057}.Release|x86.ActiveCfg = Release|Any CPU
+		{44CEA464-5D23-4736-8CB5-286A82696057}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

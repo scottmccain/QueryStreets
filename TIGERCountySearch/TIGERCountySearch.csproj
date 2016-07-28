@@ -55,13 +55,13 @@
     <EmbeddedResource Include="fips_counties.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TIGERShared\TIGERShared.csproj">
-      <Project>{C34ED930-45C0-4AF5-9C13-27E6E5A08077}</Project>
-      <Name>TIGERShared</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\FixedColumnFileReader\FixedColumnFileCollection.csproj">
+      <Project>{44CEA464-5D23-4736-8CB5-286A82696057}</Project>
+      <Name>FixedColumnFileCollection</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

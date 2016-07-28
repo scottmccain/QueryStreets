@@ -7,14 +7,14 @@ namespace FixedColumnFileCollection
 {
     public class FixedColumnDictionary
     {
-        private readonly List<FixedColumnDictionaryEntry> _columns;
+        private readonly List<IFixedColumnDictionaryEntry> _columns;
 
         public FixedColumnDictionary()
         {
-            _columns = new List<FixedColumnDictionaryEntry>();
+            _columns = new List<IFixedColumnDictionaryEntry>();
         }
 
-        public IEnumerable<FixedColumnDictionaryEntry> GetOrderdColumns()
+        public IEnumerable<IFixedColumnDictionaryEntry> GetOrderdColumns()
         {
             var query = from t in _columns
                         orderby t.ColumnStart
@@ -24,7 +24,7 @@ namespace FixedColumnFileCollection
         }
 
 
-        public void Add(FixedColumnDictionaryEntry entry)
+        public void Add(IFixedColumnDictionaryEntry entry)
         {
             _columns.Add(entry);
         }

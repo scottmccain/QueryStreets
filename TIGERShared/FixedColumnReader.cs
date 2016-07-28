@@ -22,7 +22,7 @@ namespace TIGERShared
             return query.ToList();
         }
 
-        public List<Dictionary<string, string>> Read(string data)
+        private IEnumerable<Dictionary<string, string>> Read(string data)
         {
             var records = new List<Dictionary<string, string>>();
 
@@ -52,7 +52,7 @@ namespace TIGERShared
             return records;
         }
 
-        public List<Dictionary<string, string>> Read(Stream stream)
+        public IEnumerable<Dictionary<string, string>> Read(Stream stream)
         {
             using (var reader = new StreamReader(stream))
             {

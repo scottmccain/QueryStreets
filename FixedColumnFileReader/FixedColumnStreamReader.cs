@@ -3,34 +3,41 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using FixedColumnFileCollection;
 
-namespace TIGERShared
+namespace FixedColumnFileCollection
 {
-    public class FixedColumnStreamReader : IDisposable
+    public class FixedColumnStreamReader
     {
-        private readonly StreamReader _reader;
+        private readonly StringReader _reader;
         private readonly FixedColumnDictionary _dictionary;
+        private readonly string _buffer;
 
         public FixedColumnStreamReader(Stream stream, FixedColumnDictionary dictionary)
         {
-            _dictionary = dictionary;
-            _reader = new StreamReader(stream);
+            var textReader = new StreamReader(stream);
+            _buffer = textReader.ReadToEnd();
 
+            _dictionary = dictionary;
+            _reader = new StringReader(_buffer);
         }
 
-        public bool EndOfStream => _reader.EndOfStream;
+        //public bool EndOfStream => _reader.;
 
         public Dictionary<string, string> Next()
         {
-            var line = _reader.ReadLine()?.Trim();
+            string line;
 
-            while (!_reader.EndOfStream && string.IsNullOrEmpty(line))
+            do
             {
                 line = _reader.ReadLine()?.Trim();
-            }
+            } while (line != null && line.Length == 0);
 
-            if (_reader.EndOfStream) return null;
+            //while (!string.IsNullOrEmpty(line))
+            //{
+            //    line = _reader.ReadLine()?.Trim();
+            //}
+
+            if (string.IsNullOrEmpty(line)) return null;
 
             var values = new Dictionary<string, string>();
             foreach (var t in _dictionary.GetOrderdColumns())
@@ -42,11 +49,6 @@ namespace TIGERShared
             }
 
             return values;
-        }
-
-        public void Dispose()
-        {
-            _reader.Dispose();
         }
     }
 }

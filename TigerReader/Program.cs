@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -7,6 +9,7 @@ using System.Text;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using FixedColumnFileCollection;
 using TIGERConverters;
 using TIGERConverters.RecordTypes;
 using TIGERCountySearch;
@@ -32,6 +35,7 @@ namespace TIGER_Reader
                 catch (Exception ex)
                 {
                     // ignored
+                    var type = ex.GetType();
                 }
             });
 
@@ -40,8 +44,8 @@ namespace TIGER_Reader
 
         private static void Execute()
         {
-            var countyCode = string.Empty;
-            var stateCode = string.Empty;
+            //var countyCode = string.Empty;
+            //var stateCode = string.Empty;
 
             const string countyName = "San Diego";
             const string stateName = "CA";
@@ -77,13 +81,13 @@ namespace TIGER_Reader
             Console.WriteLine($"Processing {countyName} ...");
 
             Console.WriteLine("Processing places...");
-            ProcessPlaces(stateName, countyName, filename);
+            ProcessPlaces(countyName, stateName, filename);
 
             Console.WriteLine("Building Type 1 Records...");
-            var recordType1List = ConvertRecordType1List(filename);
+            var recordType1List = ConvertRecordType1List(countyName, filename);
 
             Console.WriteLine("Processing Type 1 Records...");
-            ProcessRecordType1List(stateCode, countyCode, recordType1List);
+            ProcessRecordType1List(countyName, recordType1List);
 
             Console.WriteLine("Processing Type 2 Records...");
             ProcessRecordType2List(filename, recordType1List);
@@ -107,27 +111,43 @@ namespace TIGER_Reader
 
             // TODO: Figure out record converter based on type
             // use some reflection
-            using (
-                var reader = new RecordReader<RecordTypeC, RecordTypeCConverter>(File.OpenRead(extractedFilename)))
+
+            var converter = new RecordTypeCConverter();
+            var reader = new FixedColumnCollection<RecordTypeC>(File.OpenRead(extractedFilename),
+                RecordTypeDictionaryRepository.ReadRecordTypeDictionary(TigerLineRecordType.RecordTypeC),
+                (record) => converter.Convert(record));
+
+
+            using (var ds = new TigerLineDataService())
             {
-                using (var ds = new TigerLineDataService())
+                foreach (
+                    var record in
+                        reader.Where(r => !string.IsNullOrEmpty(r?.Fips))
+                            .GroupBy(r => stateCode + countyCode + r?.Fips)
+                            .Select(group => group?.First()))
                 {
-                    foreach (
-                        var record in
-                            reader.Where(r => !string.IsNullOrEmpty(r?.FIPS))
-                                .GroupBy(r => stateCode + countyCode + r?.FIPS)
-                                .Select(group => group?.First()))
+                    try
                     {
-                        ds.CreatePlace($"{stateCode}{countyCode}{record?.FIPS}".SafeConvert<int>(),
-                            stateCode, countyCode, record?.FIPS, stateName, countyName, record?.NAME);
+                        ds.CreatePlace($"{stateCode}{countyCode}{record?.Fips}".SafeConvert<int>(),
+                            stateCode, countyCode, record?.Fips, stateName, countyName, record?.Name);
+                    }
+                        // TODO: create custom exception thrown from application
+                    catch (EntityException ex)
+                    {
+                        Console.WriteLine($"Failed to insert place: {ex.InnerException.Message}");
                     }
                 }
-
             }
         }
 
-        private static void ProcessRecordType1List(string stateCode, string countyCode, ICollection<RecordType1> records)
+
+
+        private static void ProcessRecordType1List(string countyName, IList<RecordType1> records)
         {
+            var countyInfo = FipsCountyRecordRepository.GetCountyInfo(countyName);
+            var stateCode = countyInfo?.Item2?.Trim();
+            var countyCode = countyInfo?.Item1?.Trim();
+
             using (var ds = new TigerLineDataService())
             {
                 var count = records.Count;
@@ -196,192 +216,210 @@ namespace TIGER_Reader
                     ds.CreateStreetSegment(record.TLID, 0, record.FRLAT, record.FRLONG);
                     ds.CreateStreetSegment(record.TLID, 5000, record.TOLAT, record.TOLONG);
 
-                    if (current++%100 != 0) continue;
-                    Console.Write($"{((double) current/count)*100:0.00}% Complete\r");
+                    //if (current++%100 != 0) continue;
+                    //Console.Write($"{((double) current/count)*100:0.00}% Complete\r");
                 }
             }
         }
 
         private static void ProcessRecordType2List(string filename, IEnumerable<RecordType1> recordType1List)
         {
-            var conversionWrapper
-                = GetRecordConversionWrapper(filename, "rt2", TigerLineRecordType.RecordType2);
+            //var conversionWrapper
+            //    = GetRecordConversionWrapper(filename, "rt2", TigerLineRecordType.RecordType2);
 
-            var recordType2List = ConvertRecordList(conversionWrapper, new RecordType2Converter());
+            //var recordType2List = ConvertRecordList(conversionWrapper, new RecordType2Converter());
 
-            var query = from rt1 in recordType1List
-                        join rt2 in recordType2List on rt1.TLID equals rt2.TLID
-                        select rt2;
+            //var query = from rt1 in recordType1List
+            //            join rt2 in recordType2List on rt1.TLID equals rt2.TLID
+            //            select rt2;
 
-            using (var ds = new TigerLineDataService())
-            {
-                foreach (var record in query)
-                {
-                    double latitude, longitude;
+            //using (var ds = new TigerLineDataService())
+            //{
+            //    foreach (var record in query)
+            //    {
+            //        double latitude, longitude;
 
-                    var count = 0;
-                    do
-                    {
-                        latitude = record.Latitude[count];
-                        longitude = record.Longitude[count];
+            //        var count = 0;
+            //        do
+            //        {
+            //            latitude = record.Latitude[count];
+            //            longitude = record.Longitude[count];
 
-                        if (Math.Abs(latitude - 0) > double.Epsilon && Math.Abs(longitude - 0) > double.Epsilon)
-                        {
-                            ds.CreateStreetSegment(record.TLID, $"{record.RTSQ}{count}".SafeConvert<int>(), latitude, longitude);
-                        }
+            //            if (Math.Abs(latitude - 0) > double.Epsilon && Math.Abs(longitude - 0) > double.Epsilon)
+            //            {
+            //                ds.CreateStreetSegment(record.TLID, $"{record.RTSQ}{count}".SafeConvert<int>(), latitude, longitude);
+            //            }
 
-                        count++;
+            //            count++;
 
-                    } while (Math.Abs(latitude - 0) > Double.Epsilon && Math.Abs(longitude - 0) > Double.Epsilon &&
-                             count < 10);
-                }
-            }
+            //        } while (Math.Abs(latitude - 0) > Double.Epsilon && Math.Abs(longitude - 0) > Double.Epsilon &&
+            //                 count < 10);
+            //    }
+            //}
         }
 
         private static void ProcessRecordType4AndType5List(string filename,
                                                             IEnumerable<RecordType1> recordType1List)
         {
-            var conversionWrapper
-                = GetRecordConversionWrapper(filename, "rt4", TigerLineRecordType.RecordType4);
+            //var conversionWrapper
+            //    = GetRecordConversionWrapper(filename, "rt4", TigerLineRecordType.RecordType4);
 
-            var recordType4List = ConvertRecordList(conversionWrapper, new RecordType4Converter());
+            //var recordType4List = ConvertRecordList(conversionWrapper, new RecordType4Converter());
 
-            conversionWrapper
-                = GetRecordConversionWrapper(filename, "rt5", TigerLineRecordType.RecordType5);
+            //conversionWrapper
+            //    = GetRecordConversionWrapper(filename, "rt5", TigerLineRecordType.RecordType5);
 
-            var recordType5List = ConvertRecordList(conversionWrapper, new RecordType5Converter());
+            //var recordType5List = ConvertRecordList(conversionWrapper, new RecordType5Converter());
 
-            if (recordType1List == null) return;
+            //if (recordType1List == null) return;
 
-            var query = from rt1 in recordType1List
-                        join rt4 in recordType4List on rt1.TLID equals rt4.TLID
-                        select new { rt1.TLID, rt4.FeatureIds };
+            //var query = from rt1 in recordType1List
+            //            join rt4 in recordType4List on rt1.TLID equals rt4.TLID
+            //            select new { rt1.TLID, rt4.FeatureIds };
 
-            using (var ds = new TigerLineDataService())
-            {
-                var queryRows = query.ToList();
-                var rows = ds.GetStreetNamesByIdList(queryRows.Select(i => i.TLID).ToList());
+            //using (var ds = new TigerLineDataService())
+            //{
+            //    var queryRows = query.ToList();
+            //    var rows = ds.GetStreetNamesByIdList(queryRows.Select(i => i.TLID).ToList());
 
-                foreach (var record in queryRows)
-                {
-                    var tlid = record.TLID;
-                    var filteredRows = rows.Where(i => i.TigerLineId == tlid).ToList();
+            //    foreach (var record in queryRows)
+            //    {
+            //        var tlid = record.TLID;
+            //        var filteredRows = rows.Where(i => i.TigerLineId == tlid).ToList();
 
-                    foreach (var featureId in record.FeatureIds)
-                    {
-                        // found the first blank feature id
-                        if (featureId == 0) break;
+            //        foreach (var featureId in record.FeatureIds)
+            //        {
+            //            // found the first blank feature id
+            //            if (featureId == 0) break;
 
-                        var id = featureId;
-                        var findFeatureQuery = from rt5 in recordType5List
-                                               where rt5.FEAT == id
-                                               select rt5;
+            //            var id = featureId;
+            //            var findFeatureQuery = from rt5 in recordType5List
+            //                                   where rt5.FEAT == id
+            //                                   select rt5;
 
-                        var foundFeature = findFeatureQuery.FirstOrDefault();
+            //            var foundFeature = findFeatureQuery.FirstOrDefault();
 
-                        // and copy matching feature data from rt5
-                        if (foundFeature == null) continue;
+            //            // and copy matching feature data from rt5
+            //            if (foundFeature == null) continue;
 
-                        foreach (var streetNameRecord in filteredRows)
-                        {
-                            ds.CreateStreet(
-                                record.TLID, 
-                                streetNameRecord.CensusFeatureClassCode, 
-                                foundFeature.FEDIRP, 
-                                foundFeature.FENAME, 
-                                foundFeature.FETYPE, 
-                                streetNameRecord.PlaceId.ToString(CultureInfo.InvariantCulture), 
-                                foundFeature.FEDIRS);
-                        }
-                    }
-                }
-            }
+            //            foreach (var streetNameRecord in filteredRows)
+            //            {
+            //                ds.CreateStreet(
+            //                    record.TLID, 
+            //                    streetNameRecord.CensusFeatureClassCode, 
+            //                    foundFeature.FEDIRP, 
+            //                    foundFeature.FENAME, 
+            //                    foundFeature.FETYPE, 
+            //                    streetNameRecord.PlaceId.ToString(CultureInfo.InvariantCulture), 
+            //                    foundFeature.FEDIRS);
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         private static void ProcessRecordType6List(string filename, IEnumerable<RecordType1> recordType1List)
         {
-            var conversionWrapper
-                = GetRecordConversionWrapper(filename, "rt6", TigerLineRecordType.RecordType6);
+            //var conversionWrapper
+            //    = GetRecordConversionWrapper(filename, "rt6", TigerLineRecordType.RecordType6);
 
-            var recordType6List = ConvertRecordList(conversionWrapper, new RecordType6Converter());
+            //var recordType6List = ConvertRecordList(conversionWrapper, new RecordType6Converter());
 
-            var query = from rt1 in recordType1List
-                        join rt6 in recordType6List on rt1.TLID equals rt6.TLID
-                        select rt6;
+            //var query = from rt1 in recordType1List
+            //            join rt6 in recordType6List on rt1.TLID equals rt6.TLID
+            //            select rt6;
 
-            using (var ds = new TigerLineDataService())
-            {
-                foreach (var record in query)
-                {
-                    if (!string.IsNullOrEmpty(record.FRADDR))
-                    {
-                        var fromAddress = record.FRADDR;
-                        if (fromAddress.Contains("-"))
-                        {
-                            var range = fromAddress.Split('-');
-                            fromAddress = range[0] + range[1];
-                        }
+            //using (var ds = new TigerLineDataService())
+            //{
+            //    foreach (var record in query)
+            //    {
+            //        if (!string.IsNullOrEmpty(record.FRADDR))
+            //        {
+            //            var fromAddress = record.FRADDR;
+            //            if (fromAddress.Contains("-"))
+            //            {
+            //                var range = fromAddress.Split('-');
+            //                fromAddress = range[0] + range[1];
+            //            }
 
-                        var toAddress = record.TOADDR;
-                        if (toAddress.Contains("-"))
-                        {
-                            var range = toAddress.Split('-');
-                            toAddress = range[0] + range[1];
-                        }
+            //            var toAddress = record.TOADDR;
+            //            if (toAddress.Contains("-"))
+            //            {
+            //                var range = toAddress.Split('-');
+            //                toAddress = range[0] + range[1];
+            //            }
 
-                        ds.CreateAddress(record.TLID, -1, fromAddress, toAddress);
-                    }
+            //            ds.CreateAddress(record.TLID, -1, fromAddress, toAddress);
+            //        }
 
-                    if (!string.IsNullOrEmpty(record.FRADDL))
-                    {
-                        var fromAddress = record.FRADDL;
-                        if (fromAddress.Contains("-"))
-                        {
-                            var range = fromAddress.Split('-');
-                            fromAddress = range[0] + range[1];
-                        }
+            //        if (!string.IsNullOrEmpty(record.FRADDL))
+            //        {
+            //            var fromAddress = record.FRADDL;
+            //            if (fromAddress.Contains("-"))
+            //            {
+            //                var range = fromAddress.Split('-');
+            //                fromAddress = range[0] + range[1];
+            //            }
 
-                        var toAddress = record.TOADDL;
-                        if (toAddress.Contains("-"))
-                        {
-                            var range = toAddress.Split('-');
-                            toAddress = range[0] + range[1];
-                        }
+            //            var toAddress = record.TOADDL;
+            //            if (toAddress.Contains("-"))
+            //            {
+            //                var range = toAddress.Split('-');
+            //                toAddress = range[0] + range[1];
+            //            }
 
-                        ds.CreateAddress(record.TLID, -2, fromAddress, toAddress);
-                    }
-                }
-            }
+            //            ds.CreateAddress(record.TLID, -2, fromAddress, toAddress);
+            //        }
+            //    }
+            //}
         }
 
-        private static List<RecordType1> ConvertRecordType1List(string filename)
+        private static IList<RecordType1> ConvertRecordType1List(string countyName, string zipfileLocation)
         {
-            const string streetFeatureCode = "A";
             const string recordType1Extension = "rt1";
 
-            var conversionWrapper
-                = GetRecordConversionWrapper(filename, recordType1Extension, TigerLineRecordType.RecordType1);
+            var countyInfo = FipsCountyRecordRepository.GetCountyInfo(countyName);
 
-            var filter = from rt1 in conversionWrapper.Rows
-                         where rt1[StringConstants.CensusFeatureClassCode].Substring(0, 1).Equals(streetFeatureCode) &&
-                         (!string.IsNullOrEmpty(rt1[StringConstants.PlaceLeft]) || !string.IsNullOrEmpty(rt1[StringConstants.PlaceRight])) &&
-                         (!string.IsNullOrEmpty(rt1[StringConstants.StartAddressLeft]) || !string.IsNullOrEmpty(rt1[StringConstants.StartAddressRight]))
-                         select rt1;
+            // TODO: discover extension based on type
+            var extractedFilename = ZipFileManager.ExtractFileByExtension(zipfileLocation, @".\", recordType1Extension);
 
-            conversionWrapper.Rows = filter.ToList();
-            return ConvertRecordList(conversionWrapper, new RecordType1Converter());
+            const string streetFeatureCode = "A";
+
+            var converter = new RecordType1Converter();
+            var reader = new FixedColumnCollection<RecordType1>(File.OpenRead(extractedFilename), 
+                RecordTypeDictionaryRepository.ReadRecordTypeDictionary(TigerLineRecordType.RecordType1),
+                (record) => converter.Convert(record));
+
+            return reader
+                .Where(r => r.CFCC.Substring(0, 1).Equals(streetFeatureCode) &&
+                            (!string.IsNullOrEmpty(r.PLACEL) || !string.IsNullOrEmpty(r.PLACER)) &&
+                            (!string.IsNullOrEmpty(r.FRADDL) || !string.IsNullOrEmpty(r.FRADDR))).ToList();
+
+            //const string recordType1Extension = "rt1";
+
+            //var conversionWrapper
+            //    = GetRecordConversionWrapper(filename, recordType1Extension, TigerLineRecordType.RecordType1);
+
+            //var filter = from rt1 in conversionWrapper.Rows
+            //             where rt1[StringConstants.CensusFeatureClassCode].Substring(0, 1).Equals(streetFeatureCode) &&
+            //             (!string.IsNullOrEmpty(rt1[StringConstants.PlaceLeft]) || !string.IsNullOrEmpty(rt1[StringConstants.PlaceRight])) &&
+            //             (!string.IsNullOrEmpty(rt1[StringConstants.StartAddressLeft]) || !string.IsNullOrEmpty(rt1[StringConstants.StartAddressRight]))
+            //             select rt1;
+
+            //conversionWrapper.Rows = filter.ToList();
+            //return ConvertRecordList(conversionWrapper, new RecordType1Converter());
         }
 
-        private static List<T> ConvertRecordList<T>(RecordTypeConversion rtc,
-            IClassConvert<T> converter)
-        {
-            return rtc.Rows.Select(converter.Convert).ToList();
-        }
+        //private static List<T> ConvertRecordList<T>(RecordTypeConversion rtc,
+        //    IClassConvert<T> converter)
+        //{
+        //    return rtc.Rows.Select(converter.Convert).ToList();
+        //}
 
-        private static IEnumerable<T> ConvertRecordList<T>(IEnumerable<Dictionary<string, string>> rows, IClassConvert<T> converter)
-        {
-            return rows.Select(converter.Convert);
-        } 
+        //private static IEnumerable<T> ConvertRecordList<T>(IEnumerable<Dictionary<string, string>> rows, IClassConvert<T> converter)
+        //{
+        //    return rows.Select(converter.Convert);
+        //} 
             
 
         private static RecordTypeConversion GetRecordConversionWrapper(string filename, string extension, TigerLineRecordType recordType)

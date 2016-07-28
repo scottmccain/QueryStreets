@@ -117,11 +117,12 @@ namespace TIGERConverters
 
         public static Func<Dictionary<string, string>, RecordTypeC> GetRecordTypeCConversion()
         {
+            // TODO: get field name from attributes
             return record => new RecordTypeC
                                  {
-                                       FIPS = record[StringConstants.FipsCode],
-                                       FIPSTYPE = record[StringConstants.FipsType],
-                                       NAME = record[StringConstants.Name]
+                                       Fips = record[StringConstants.FipsCode],
+                                       FipsType = record[StringConstants.FipsType],
+                                       Name = record[StringConstants.Name]
                                    };
         }
 

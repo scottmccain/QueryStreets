@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using System.IO;
-using TIGERShared;
+using FixedColumnFileCollection;
 
 namespace TIGERConverters
 {
-    public class RecordTypeDictionaryRepository
+    public static class RecordTypeDictionaryRepository
     {
         public static FixedColumnDictionary ReadRecordTypeDictionary(TigerLineRecordType type)
         {
@@ -53,4 +53,6 @@ namespace TIGERConverters
         }
 
     }
+
+
 }

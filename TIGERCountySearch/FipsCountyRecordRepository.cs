@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Reflection;
-using TIGERShared;
+using FixedColumnFileCollection;
 
 namespace TIGERCountySearch
 {
@@ -45,28 +45,45 @@ namespace TIGERCountySearch
 
         private static List<FipsCountyRecord> ReadFipsCountyRecords()
         {
-            var fipsDictionary = new List<FixedColumnDictionaryEntry>()
-            {
-                new FixedColumnDictionaryEntry() { Name = StateCodeKey, ColumnStart = StateColumnStart, Length = StateColumnLength },
-                new FixedColumnDictionaryEntry(){ Name = CountyCodeKey, ColumnStart = CountyCodeColumnStart, Length = CountyCodeColumnLength },
-                new FixedColumnDictionaryEntry() { Name = CountyNameKey, ColumnStart = CountyNameColumnStart, Length = CountyNameColumnLength}
-            };
+            //var fipsDictionary = new List<IFixedColumnDictionaryEntry>()
+            //{
+            //    new FixedColumnDictionaryEntry() { Name = StateCodeKey, ColumnStart = StateColumnStart, Length = StateColumnLength },
+            //    new FixedColumnDictionaryEntry(){ Name = CountyCodeKey, ColumnStart = CountyCodeColumnStart, Length = CountyCodeColumnLength },
+            //    new FixedColumnDictionaryEntry() { Name = CountyNameKey, ColumnStart = CountyNameColumnStart, Length = CountyNameColumnLength}
+            //};
+            var dictionary = new FixedColumnDictionary();
+
+            dictionary.Add(new FixedColumnDictionaryEntry { Name = StateCodeKey, ColumnStart = StateColumnStart, Length = StateColumnLength});
+            dictionary.Add(new FixedColumnDictionaryEntry { Name = CountyCodeKey, ColumnStart = CountyCodeColumnStart, Length = CountyCodeColumnLength });
+            dictionary.Add(new FixedColumnDictionaryEntry { Name = CountyNameKey, ColumnStart = CountyNameColumnStart, Length = CountyNameColumnLength });
 
             // read county fips codes
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TIGERCountySearch.fips_counties.txt"))
             {
-                var fipsCountyReader = new FixedColumnReader(fipsDictionary);
-                var records = fipsCountyReader.Read(stream);
+                var rows = new FixedColumnCollection<FipsCountyRecord>(stream, dictionary, (c) => new FipsCountyRecord
+                {
+                    // TODO: read from type
+                    StateCode = c[StateCodeKey],
+                    CountyCode = c[CountyCodeKey],
+                    CountyName = c[CountyNameKey]
+                });
 
-                var query = from record in records
-                            select new FipsCountyRecord()
-                            {
-                                StateCode = record[StateCodeKey],
-                                CountyCode = record[CountyCodeKey],
-                                CountyName = record[CountyNameKey]
-                            };
+                return rows.ToList();
 
-                return query.ToList();
+                //foreach(var record in rows)
+                //{ 
+                //var fipsCountyReader = new FixedColumnReader(dictionary);
+                //var records = fipsCountyReader.Read(stream);
+
+                //var query = from record in records
+                //            select new FipsCountyRecord()
+                //            {
+                //                StateCode = record[StateCodeKey],
+                //                CountyCode = record[CountyCodeKey],
+                //                CountyName = record[CountyNameKey]
+                //            };
+
+                //return query.ToList();
             }
         }
 
